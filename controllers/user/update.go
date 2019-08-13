@@ -1,7 +1,6 @@
 package user
 
 import (
-	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"vkbeego/models"
@@ -27,8 +26,9 @@ func (c *UpdateController) Post() {
 
 	exist := o.QueryTable("user").Filter("UserName", username).Exist()
 	if !exist{
-		c.Ctx.WriteString("Username doesn't exist!")
-		return;
+		c.Data["json"] = map[string]interface{}{"code": 1, "ext": "Username doesn't exist!"}
+		c.ServeJSON()
+		return
 	}
 
 	var user models.User
@@ -37,12 +37,15 @@ func (c *UpdateController) Post() {
 	if o.Read(&user) == nil {
 		user.Password = new_password
 		if num, err := o.Update(&user); err == nil {
-			fmt.Println(num)
+			if num != 0 {
+				c.Data["json"] = map[string]interface{}{"code": 0, "ext": "Password has been updated!"}
+				c.ServeJSON()
+			}
 		}
 	}else {
-		c.Ctx.WriteString("Username or password is wrong!")
-		return;
+		c.Data["json"] = map[string]interface{}{"code": 2, "ext": "Username or password is wrong!"}
+		c.ServeJSON()
 	}
 
-	c.Ctx.WriteString("Password has been updated!")
+	return
 }

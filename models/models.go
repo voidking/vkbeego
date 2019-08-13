@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/mattn/go-sqlite3"
+	//_ "github.com/go-sql-driver/mysql"
 )
 
 type User struct {
@@ -33,5 +34,7 @@ func init() {
 	orm.RegisterModel(new(User))
 	orm.RegisterDriver("sqlite3", orm.DRSqlite)
 	orm.RegisterDataBase("default", "sqlite3", "db.sqlite3")
+	//orm.RegisterDriver("mysql", orm.DRMySQL)
+	//orm.RegisterDataBase("default", "mysql", "root:voidking@tcp(192.168.56.104:3306)/vkbeego?charset=utf8")
 	create_table()
 }

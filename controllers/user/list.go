@@ -24,3 +24,16 @@ func (c *ListController) Get() {
 	c.Data["users"] = users
 	c.TplName = "user/list.tpl"
 }
+
+func (c *ListController) Post() {
+	var o = orm.NewOrm()
+	o.Using("default")
+	var qs orm.QuerySeter
+	qs = o.QueryTable("user")
+	var users []*models.User
+	//num, err := qs.All(&users)
+	qs.All(&users,"Id", "Username")
+	c.Data["json"] = map[string]interface{}{"code": 0, "ext": "success", "userlist": users}
+	c.ServeJSON()
+	return
+}

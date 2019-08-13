@@ -23,9 +23,11 @@ func (c *DelController) Post() {
 	num,err := o.QueryTable("user").Filter("Id",id).Delete()
 	fmt.Printf("Returned Rows Num: %d, %s \n", num, err)
 	if num != 0 {
-		c.Ctx.WriteString("User has been deleted!")
+		c.Data["json"] = map[string]interface{}{"code": 0, "ext": "User has been deleted!"}
+		c.ServeJSON()
 	}else{
-		c.Ctx.WriteString("User Id doesn't exist! Can't delete!")
+		c.Data["json"] = map[string]interface{}{"code": 1, "ext": "User Id doesn't exist! Can't delete!"}
+		c.ServeJSON()
 	}
-
+	return
 }
